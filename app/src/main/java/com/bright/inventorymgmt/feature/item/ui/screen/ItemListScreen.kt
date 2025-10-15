@@ -123,6 +123,7 @@ fun ItemListScreen(modifier: Modifier = Modifier) {
                                 contentDescription = "delete",
                                 modifier = Modifier
                                     .clickable {
+                                        itemListViewModel.deleteItem(it)
                                         //Write the code to delete it
 
                                     }
@@ -142,7 +143,7 @@ fun ItemListScreen(modifier: Modifier = Modifier) {
     }
     if (editDialog.value) {
         EditItemDialog(
-            onDismissRequest = {addDialog.value = false},
+            onDismissRequest = {editDialog.value = false},
             createItemUiState = createItemUiState,
             createItemViewModel = createItemViewModel
         )
@@ -209,7 +210,7 @@ fun EditItemDialog(
                 Spacer(modifier = Modifier.height(24.dp))
                 TextButton(
                     onClick = {
-                        createItemViewModel.insertItem()
+                        createItemViewModel.updateItem()
                         onDismissRequest()
                     },
                     modifier = Modifier.align(Alignment.End),

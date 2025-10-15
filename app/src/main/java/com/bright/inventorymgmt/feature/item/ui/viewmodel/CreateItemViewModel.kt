@@ -79,6 +79,39 @@ class CreateItemViewModel(
         }
     }
 
+    fun updateItem() {
+        viewModelScope.launch {
+            _createItemUiState.update {
+                it.copy(isLoading = true)
+            }
+            try {
+                withContext(Dispatchers.IO) {
+                    itemRepository.updateItem(
+                        Item(
+                            id = _createItemUiState.value.id!!,
+                            name = _createItemUiState.value.name,
+                            price = _createItemUiState.value.price.toDouble(),
+                            quantity = _createItemUiState.value.quantity.toInt()
+                        )
+                    )
+                }
+                _createItemUiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isSuccess = true
+                    )
+                }
+            } catch (e: Exception) {
+                _createItemUiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = e.message
+                    )
+                }
+            }
+        }
+    }
+
     fun resetCreateUiState() {
         _createItemUiState.update {
             CreateItemUiState.Empty

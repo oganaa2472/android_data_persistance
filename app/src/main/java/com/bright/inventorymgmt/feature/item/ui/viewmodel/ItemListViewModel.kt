@@ -16,10 +16,19 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class ItemListViewModel(
     private val itemRepository: ItemRepository
 ): ViewModel() {
+    fun deleteItem(it: Item) {
+        viewModelScope.launch {
+            itemRepository.deleteItem(it)
+        }
+    }
+
+
+
 
     val itemListUiState: StateFlow<ItemListUiState> =
         itemRepository.getAllItems()
